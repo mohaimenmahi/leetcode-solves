@@ -23,13 +23,11 @@ private:
             return;
         }
 
-        for(int i = idx; i < s.size(); i++) {
-            int c = s[idx] - '0';
-            for(int j = 0; j < mp[c].size(); j++) {
-                cur.push_back(mp[c][j]);
-                backtrack(i+1, mp, s, cur, ans);
-                cur.pop_back();
-            }
+        int c = s[idx] - '0';
+        for(int j = 0; j < mp[c].size(); j++) {
+            cur.push_back(mp[c][j]);
+            backtrack(idx+1, mp, s, cur, ans);
+            cur.pop_back();
         }
     }
 public:
