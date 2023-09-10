@@ -1,25 +1,33 @@
 class Solution {
+private:
+    string backtrack(int idx, unordered_set<string>& st, string ans) {
+        if(idx == ans.size()) {
+            if(st.find(ans) == st.end()) return ans;
+            else return "null";
+        }
+
+        // idx'th digit will be 0, go for next
+        string res = backtrack(idx+1, st, ans);
+        if(res != "null") return res;
+
+        // idx'th digit is 1, go for next
+        ans[idx] = '1';
+        res = backtrack(idx+1, st, ans);
+        
+        if(res !="null") return res;
+        else return "null";
+    }
 public:
     string findDifferentBinaryString(vector<string>& nums) {
         int n = nums.size();
         unordered_set<string> st;
-        string ans = "";
+        string ans = ""; 
 
         for(int i = 0; i < n; i++) {
             st.insert(nums[i]);
             ans.push_back('0');
         }
 
-        int j = 0;
-        while(st.find(ans) != st.end()) {
-            if(ans[j] == '0') ans[j] = '1';
-            else {
-                ans[j] = '0';
-                ans[j+1] = '1';
-            }
-            j++;
-        }
-        
-        return ans;
+        return backtrack(0, st, ans);
     }
 };
