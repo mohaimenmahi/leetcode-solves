@@ -12,7 +12,7 @@ private:
     }
 
     void backtrack(int i, vector<string>& arr, string cur, int& ans) {
-        if(i >= arr.size()) return;
+        if(i == arr.size()) return;
 
         for(int j = i; j < arr.size(); j++) {
             string str = cur + arr[j];
