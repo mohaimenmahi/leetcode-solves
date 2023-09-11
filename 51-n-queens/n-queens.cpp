@@ -15,22 +15,22 @@ private:
         }
 
         for(int c = 0; c < n; c++) {
-            if(col.find(c) != col.end() ||
-                neg.find(r-c) != neg.end() ||
-                pos.find(r+c) != pos.end()
-            ) continue;
+            if(col.find(c) == col.end() &&
+                neg.find(r-c) == neg.end() &&
+                pos.find(r+c) == pos.end()
+            ) {
+                col.insert(c);
+                neg.insert(r-c);
+                pos.insert(r+c);
+                board[r][c] = 'Q';
 
-            col.insert(c);
-            neg.insert(r-c);
-            pos.insert(r+c);
-            board[r][c] = 'Q';
+                backtrack(r+1, n, col, neg, pos, board, ans);
 
-            backtrack(r+1, n, col, neg, pos, board, ans);
-
-            col.erase(c);
-            neg.erase(r-c);
-            pos.erase(r+c);
-            board[r][c] = '.';
+                col.erase(c);
+                neg.erase(r-c);
+                pos.erase(r+c);
+                board[r][c] = '.';
+            }
         } 
     }
 public:
