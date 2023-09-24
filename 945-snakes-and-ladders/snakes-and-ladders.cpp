@@ -27,12 +27,12 @@ public:
 
             for(int i = 1; i <= 6; i++) {
                 int next = cur + i;
-
+                
                 pair<int, int> pos = numToPos(next, n);
                 int r = pos.first, c = pos.second;
                 if(board[r][c] != -1) next = board[r][c];
                 if(next == n * n) return moves + 1;
-                if(vis.find(next) == vis.end()) {
+                if(!vis.count(next)) {
                     vis.insert(next);
                     q.push({next, moves + 1});
                 }
