@@ -4,6 +4,7 @@ private:
         int p = parent[node];
 
         while(p != parent[p]) {
+            parent[p] = parent[parent[p]];
             p = parent[p];
         }
 
