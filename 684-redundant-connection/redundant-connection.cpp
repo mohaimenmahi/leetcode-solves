@@ -8,6 +8,7 @@ private:
             p = parent[p];
         }
 
+        parent[node] = p;
         return p;
     }
 
