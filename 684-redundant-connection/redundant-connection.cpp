@@ -9,7 +9,7 @@ private:
         }
 
         parent[node] = p;
-        return p;
+        return parent[node];
     }
 
     bool makeUnion(int n1, int n2, vector<int>& parent, vector<int>& rank) {
