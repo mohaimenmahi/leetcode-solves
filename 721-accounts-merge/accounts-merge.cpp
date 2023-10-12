@@ -62,18 +62,17 @@ public:
 
         unordered_map<int, vector<string>> emailGroup;
 
-        for(auto& it:emailToAc) {
-            int p = uf->find(it.second);
-            emailGroup[p].push_back(it.first);
+        for(auto [email, idx]:emailToAc) {
+            int p = uf->find(idx);
+            emailGroup[p].push_back(email);
         }
 
         vector<vector<string>> ans;
 
-        for(auto& it:emailGroup) {
-            int idx = it.first;
+        for(auto [idx, emails]:emailGroup) {
             vector<string> merged;
             merged.push_back(accounts[idx][0]);
-            merged.insert(merged.begin()+1, it.second.begin(), it.second.end());
+            merged.insert(merged.begin()+1, emails.begin(), emails.end());
 
             sort(merged.begin()+1, merged.end());
             ans.push_back(merged);
