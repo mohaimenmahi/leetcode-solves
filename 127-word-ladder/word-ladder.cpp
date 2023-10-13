@@ -1,7 +1,7 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& words) {
-        set<string> st, vis;
+        unordered_set<string> st, vis;
 
         for(int i = 0; i < words.size(); i++) st.insert(words[i]);
 
