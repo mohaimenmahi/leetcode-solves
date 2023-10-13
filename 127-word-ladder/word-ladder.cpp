@@ -16,23 +16,23 @@ public:
             level++;
 
             for(int i = 0; i < size; i++) {
-                string val = q.front();
+                string word = q.front();
                 q.pop();
 
-                if(val == endWord) return level;
-                st.erase(val); // we are just removing the popped word. That works like vis
+                if(word == endWord) return level;
+                st.erase(word); // we are just removing the popped word. That works like vis
 
-                string str;
                 for(int j = 0; j < len; j++) {
-                    str = val;
+                    char c = word[j];
                     for(int k = 0; k < 26; k++) {
-                        if(val[j] == 'a' + k) continue;
+                        if(word[j] == 'a' + k) continue;
 
-                        str[j] = 'a' + k;
-                        if(st.find(str) != st.end()) {
-                            q.push(str);
+                        word[j] = 'a' + k;
+                        if(st.find(word) != st.end()) {
+                            q.push(word);
                         }
                     }
+                    word[j] = c;
                 }
             }
         }
