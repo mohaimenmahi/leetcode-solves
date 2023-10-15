@@ -1,28 +1,23 @@
+/* BFS Solution*/
+
 class Solution {
 private:
     vector<int> getDist(vector<vector<int>>& graph, int src, int n) {
-        priority_queue<
-            pair<int, int>,
-            vector<pair<int, int>>,
-            greater<pair<int, int>>
-        > pq;
+        queue<int> q;
 
         vector<int> dist(n, INT_MAX);
 
         dist[src] = 0;
-        pq.push({0, src});
+        q.push(src);
 
-        while(!pq.empty()) {
-            auto top = pq.top();
-            pq.pop();
-            
-            int node = top.second;
-            int d = top.first;
+        while(!q.empty()) {
+            int node = q.front();
+            q.pop();
 
             for(auto v:graph[node]) {
-                if(d + 1 < dist[v]) {
-                    dist[v] = d + 1;
-                    pq.push({dist[v], v});
+                if(dist[node] + 1 < dist[v]) {
+                    dist[v] = dist[node] + 1;
+                    q.push(v);
                 }
             }
         }
