@@ -4,20 +4,23 @@ class Solution {
 private:
     vector<int> getDist(vector<vector<int>>& graph, int src, int n) {
         queue<int> q;
+        vector<int> vis(n, 0);
 
-        vector<int> dist(n, INT_MAX);
+        vector<int> dist(n, -1);
 
         dist[src] = 0;
         q.push(src);
+        vis[src] = 1;
 
         while(!q.empty()) {
             int node = q.front();
             q.pop();
 
-            for(auto v:graph[node]) {
-                if(dist[node] + 1 < dist[v]) {
+            for(int v:graph[node]) {
+                if(!vis[v]) {
                     dist[v] = dist[node] + 1;
                     q.push(v);
+                    vis[v] = 1;
                 }
             }
         }
@@ -40,7 +43,7 @@ public:
         int idx = -1, maxVal = INT_MAX;
 
         for(int i = 0; i < n; i++) {
-            if(dist1[i] == INT_MAX || dist2[i] == INT_MAX) continue;
+            if(dist1[i] == -1 || dist2[i] == -1) continue;
 
             int maxIn = max(dist1[i], dist2[i]);
 
