@@ -9,7 +9,7 @@ private:
                 int p = dfs(v, node, seats, graph); 
                 // p = number of passengers coming to 'v'
                 pass += p;
-                ans += (long long) ceil((p * 1.0) / seats);
+                ans += (long long) ceil((double) p / seats);
                 // ceil(p / seats) = number of cars needed to come 'v' taking 'p' passengers
             }
         }
