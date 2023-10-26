@@ -65,8 +65,8 @@ private:
 
             if(ds->findUP(node) != ds->findUP(adNode)) {
                 ds->makeUnion(node, adNode);
-                dfs(ds, n, r, c, vis, grid);
             }
+            dfs(ds, n, r, c, vis, grid);
         }
     }
 public:
