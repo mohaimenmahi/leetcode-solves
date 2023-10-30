@@ -1,3 +1,5 @@
+// advanced TopoSort
+
 class Solution {
 private:
     void dfs(
@@ -20,6 +22,8 @@ private:
         }
 
         // when dfs of the node is finished, push it to the ans
+        // for nodes that does not have next node, the while loop will not executed
+        // so direct come to that step and store it
         ans.push_back(node);
     }
 public:
