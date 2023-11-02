@@ -65,7 +65,8 @@ public:
             vector<int> tmp = it.second; // nodes those have value val
             for(int node:tmp) {
                 for(int v:graph[node]) {
-                    // if the adjacent node value is less greater then val, do not union
+                    // if the adjacent node value is greater then val, do not union
+                    // because we can not go through this
                     if(val < vals[v]) continue; 
                     // otherwise, there can be a good path, make union
                     ds.makeUnion(node, v);
