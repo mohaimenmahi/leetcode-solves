@@ -56,10 +56,12 @@ public:
             if(e[0] == 3) {
                 if(alice.findUP(e[1]) == alice.findUP(e[2]) && 
                     bob.findUP(e[1]) == bob.findUP(e[2])
-                ) continue; // type 3 has already connected bob or alice 
-                alice.makeUnion(e[1], e[2]);
-                bob.makeUnion(e[1], e[2]);
-                cnt++;
+                ) {
+                    cnt++;
+                } else {
+                    alice.makeUnion(e[1], e[2]);
+                    bob.makeUnion(e[1], e[2]);
+                }   
             }
         }
 
@@ -67,21 +69,17 @@ public:
             if(e[0] == 1) {
                 if(alice.findUP(e[1]) != alice.findUP(e[2])) {
                     alice.makeUnion(e[1], e[2]);
-                    cnt++;
-                }
+                } else cnt++;
             }
             if(e[0] == 2) {
                 if(bob.findUP(e[1]) != bob.findUP(e[2])) {
                     bob.makeUnion(e[1], e[2]);
-                    cnt++;
-                } 
+                } else cnt++;
             }
         }
 
         int isSame = alice.isFullTraversable() && bob.isFullTraversable();
 
-        int ans = int(edges.size()) - cnt;
-
-        return isSame ? ans : -1;
+        return isSame ? cnt : -1;
     }
 };
