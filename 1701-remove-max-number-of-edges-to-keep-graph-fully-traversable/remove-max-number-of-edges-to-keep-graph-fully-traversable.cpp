@@ -1,10 +1,7 @@
 class DSU {
-private:
+public:
     vector<int> parent, rank;
-    int nodes;
-public:    
     DSU(int n) {
-        nodes = n;
         for(int i = 0; i <= n; i++) {
             parent.push_back(i);
             rank.push_back(1);
@@ -22,11 +19,11 @@ public:
         return p;
     }
 
-    int makeUnion(int u, int v) {
+    void makeUnion(int u, int v) {
         int p1 = findUP(u);
         int p2 = findUP(v);
 
-        if(p1 == p2) return 0;
+        if(p1 == p2) return;
 
         if(rank[p1] > rank[p2]) {
             parent[p2] = p1;
@@ -35,12 +32,15 @@ public:
             parent[p1] = p2;
             rank[p2] += rank[p1];
         }
-        nodes -= 1;
-        return 1;
     } 
 
-    bool isFullConnected() {
-        return nodes == 1;
+    bool isFullTraversable() {
+        int cnt = 0;
+        for(int i = 1; i < parent.size(); i++) {
+            if(i == findUP(i)) cnt++;
+        }
+
+        return cnt == 1;
     }
 };
 
@@ -54,23 +54,34 @@ public:
 
         for(auto e:edges) {
             if(e[0] == 3) {
-                cnt += (alice.makeUnion(e[1], e[2]) | bob.makeUnion(e[1], e[2]));
+                if(alice.findUP(e[1]) == alice.findUP(e[2]) && 
+                    bob.findUP(e[1]) == bob.findUP(e[2])
+                ) continue; // type 3 has already connected bob or alice 
+                alice.makeUnion(e[1], e[2]);
+                bob.makeUnion(e[1], e[2]);
+                cnt++;
             }
         }
 
         for(auto e:edges) {
             if(e[0] == 1) {
-                cnt += alice.makeUnion(e[1], e[2]);
+                if(alice.findUP(e[1]) != alice.findUP(e[2])) {
+                    alice.makeUnion(e[1], e[2]);
+                    cnt++;
+                }
             }
-
             if(e[0] == 2) {
-                cnt += bob.makeUnion(e[1], e[2]);
+                if(bob.findUP(e[1]) != bob.findUP(e[2])) {
+                    bob.makeUnion(e[1], e[2]);
+                    cnt++;
+                } 
             }
         }
 
-        if(alice.isFullConnected() && bob.isFullConnected())
-            return edges.size() - cnt;
+        int isSame = alice.isFullTraversable() && bob.isFullTraversable();
 
-        return -1;
+        int ans = int(edges.size()) - cnt;
+
+        return isSame ? ans : -1;
     }
 };
