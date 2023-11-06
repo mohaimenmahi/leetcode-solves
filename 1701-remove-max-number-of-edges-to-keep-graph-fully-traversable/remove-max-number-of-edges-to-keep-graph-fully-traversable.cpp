@@ -47,7 +47,7 @@ public:
 class Solution {
 public:
     int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {        
-        int cnt = 0; // number of connections we need
+        int cnt = 0;
 
         DSU alice(n);
         DSU bob(n);
