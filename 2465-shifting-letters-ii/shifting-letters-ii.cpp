@@ -22,9 +22,7 @@ public:
         for(int i = 0; i < n; i++) {
             shiftCounts = (shiftCounts + diff[i]) % 26;
 
-            if(shiftCounts < 26) shiftCounts += 26;
-
-            char newChar = 'a' + (s[i] - 'a' + shiftCounts) % 26;
+            char newChar = 'a' + (s[i] - 'a' + shiftCounts + 26) % 26;
             res.push_back(newChar);
         }
 
