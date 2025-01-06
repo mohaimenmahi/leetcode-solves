@@ -5,12 +5,18 @@ public:
 
         vector<int> ans(n, 0);
 
+        int leftCount = 0, leftMoves = 0;
+        int rightCount = 0, rightMoves = 0;
+
         for(int i = 0; i < n; i++) {
-            int moves = 0;
-            for(int j = 0; j < n; j++) {
-                if(boxes[j] == '1') moves += abs(j-i);
-            }
-            ans[i] = moves;
+            ans[i] += leftMoves;
+            leftCount += boxes[i]-'0';
+            leftMoves += leftCount;
+
+            int j = n-1-i;
+            ans[j] += rightMoves;
+            rightCount += boxes[j]-'0';
+            rightMoves += rightCount;
         }
 
         return ans;
