@@ -15,34 +15,24 @@ private:
     }
 public:
     int minimizeXor(int num1, int num2) {
-        int res = num1;
+        int res = 0;
 
         int target = countSetBits(num2);
-        int setBits = countSetBits(res);
+        int setBits = 0;
 
-        // to set and unset bits, we will start from left (Least Significant Bits)
-        // because the LSB increases or decreases the value by 1
-        // as we need to be as close as possible with num1, we need to do one by one
-        int idx = 0;
+        int idx = 31;
 
-        // if the number of set bits in potential result is less then target set bits
         while(setBits < target) {
-            if(!isSetBit(res, idx)) {
-                setBits++;
+            // target - setBits > idx = the remainig bits to make setBits == target is greater 
+            // than the bits available to the right
+            if(isSetBit(num1, idx) || target - setBits > idx) {
                 res |= 1 << idx;
+                setBits++;
             }
-            idx++; 
+            idx--;
         }
 
-        // or number of set bits are greater then the target set bits
-        while(setBits > target) {
-            if(isSetBit(res, idx)) {
-                res = res & ~(1 << idx);
-                setBits--;
-            }
-            idx++;
-        }
-
+       
         return res;
     }
 };
