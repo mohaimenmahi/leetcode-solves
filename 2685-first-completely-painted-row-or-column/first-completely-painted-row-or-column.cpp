@@ -4,26 +4,34 @@ public:
         int m = mat.size(), n = mat[0].size();
         int sz = arr.size();
 
-        vector<pair<int, int>> cellMap(sz+1);
-        vector<int> rows(m, n), cols(n, m);
+        vector<int> numToIndex(sz+1);
 
+        for(int i = 0; i < sz; i++) {
+            numToIndex[arr[i]] = i;
+        }
+
+        int res = sz;
+
+        // for each row
         for(int i = 0; i < m; i++) {
+            int maxIdx = INT_MIN;
             for(int j = 0; j < n; j++) {
-                cellMap[mat[i][j]] = {i, j};
+                maxIdx = max(maxIdx, numToIndex[mat[i][j]]);
             }
+
+            res = min(res, maxIdx);
         }
 
-        int res = 0;
+        // for each column
+        for(int i = 0; i < n; i++) {
+            int maxIdx = INT_MIN;
+            for(int j = 0; j < m; j++) {
+                maxIdx = max(maxIdx, numToIndex[mat[j][i]]);
+            }
 
-        while(res < sz) {
-            int val = arr[res];
-            int row = cellMap[val].first, col = cellMap[val].second;
-
-            rows[row]--, cols[col]--;
-            if(rows[row] <= 0 || cols[col] <= 0) return res;
-            res++;
+            res = min(res, maxIdx);
         }
 
-        return sz-1;
+        return res;
     }
 };
