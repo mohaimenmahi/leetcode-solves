@@ -4,9 +4,7 @@ public:
         int n = grid[0].size();
         long long res = LLONG_MAX;
 
-        long long firstRow = 0LL, lastRow = 0;
-
-        for(int i = 0; i < n; i++) firstRow += (long long) grid[0][i];
+        long long firstRow = accumulate(begin(grid[0]), end(grid[0]), 0LL), lastRow = 0;
 
         for(int i = 0; i < n; i++) {
             firstRow -= (long long) grid[0][i];
