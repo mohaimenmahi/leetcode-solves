@@ -1,30 +1,37 @@
 class Solution {
 private:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& safe) {
-        if(safe[node] != -1) return safe[node];
+    bool dfs(
+        int node, 
+        vector<int>& vis, 
+        vector<vector<int>>& graph
+    ) {
+        vis[node] = 1;
 
-        safe[node] = 0;
-
-        for(int i = 0; i < graph[node].size(); i++) {
-            int v = graph[node][i];
-            if(!dfs(v, graph, safe)) {
-                return safe[node];
-            }
+        for(int child:graph[node]) {
+            if(!vis[child]) {
+                if(!dfs(child, vis, graph)) return false;
+            } else if(vis[child] == 1) return false;
         }
 
-        safe[node] = 1;
-        return safe[node];
+        vis[node] = 2;
+        return true;
     }
 public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
 
-        vector<int> safe(n, -1), ans;
+        vector<int> vis(n, 0);
 
         for(int i = 0; i < n; i++) {
-            if(dfs(i, graph, safe)) ans.push_back(i);
+            if(!vis[i]) dfs(i, vis, graph);
         }
 
-        return ans;
+        vector<int> res;
+
+        for(int i = 0; i < n; i++) {
+            if(vis[i] == 2) res.push_back(i);
+        }
+
+        return res;
     }
 };
