@@ -28,7 +28,6 @@ private:
         int node, 
         vector<int>& vis, 
         vector<vector<int>>& graph, 
-        vector<vector<int>>& reverseGraph, 
         int dist,
         int& maxLen, 
         int& maxForTwo, 
@@ -39,14 +38,14 @@ private:
         dist++;
         for(int child : graph[node]) {
             if(!vis[child]) {
-                dfs(child, vis, graph, reverseGraph, dist, maxLen, maxForTwo, distMap);
+                dfs(child, vis, graph, dist, maxLen, maxForTwo, distMap);
             } else if(vis[child] == 1) {
                 int cycleLen = dist - distMap[child];
                 if(cycleLen == 2) {
                     unordered_set<int> cycleVis;
                     cycleVis.insert(node);
                     cycleVis.insert(child);
-                    maxForTwo += 2 + bfs(node, reverseGraph, cycleVis) + bfs(child, reverseGraph, cycleVis);
+                    maxForTwo += 2 + bfs(node, graph, cycleVis) + bfs(child, graph, cycleVis);
                 }
                 maxLen = max(maxLen, cycleLen);
             }
@@ -59,13 +58,11 @@ public:
         int n = favorite.size();
 
         vector<vector<int>> graph(n);
-        vector<vector<int>> reverseGraph(n);
 
         // taking the graph in reverse order
         for(int i = 0; i < n; i++) {
             int person = favorite[i];
-            graph[i].push_back(person);
-            reverseGraph[person].push_back(i);
+            graph[person].push_back(i);
         }
 
         int maxLen = 0, maxForTwo = 0;
@@ -75,7 +72,7 @@ public:
         for(int i = 0; i < n; i++) {
             if(!vis[i]) {
                 unordered_map<int, int> distMap;
-                dfs(i, vis, graph, reverseGraph, 0, maxLen, maxForTwo, distMap);
+                dfs(i, vis, graph, 0, maxLen, maxForTwo, distMap);
             }
         }
 
