@@ -1,24 +1,27 @@
 class Solution {
 private:
     int bfs(int start, vector<vector<int>>& graph, unordered_set<int>& vis) {
-        queue<pair<int, int>> q;
+        queue<int> q;
 
-        q.push({start, 0});
+        q.push(start);
         int maxLevel = 0;
 
         while(!q.empty()) {
-            auto front = q.front();
-            q.pop();
+            int size = q.size();
 
-            int depth = front.second, node = front.first;
-            maxLevel = max(maxLevel, depth);
+            for(int i = 0; i < size; i++) {
+                int node = q.front();
+                q.pop();
 
-            for(int child:graph[node]) {
-                if(!vis.count(child)) {
-                    vis.insert(child);
-                    q.push({child, depth+1});
+                for(int child:graph[node]) {
+                    if(!vis.count(child)) {
+                        vis.insert(child);
+                        q.push(child);
+                    }
                 }
             }
+            if(q.empty()) break;
+            maxLevel++;
         }
 
         return maxLevel;        
