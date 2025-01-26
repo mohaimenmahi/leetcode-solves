@@ -20,7 +20,6 @@ private:
                     }
                 }
             }
-            if(q.empty()) break;
             maxLevel++;
         }
 
@@ -48,7 +47,7 @@ private:
                     unordered_set<int> cycleVis;
                     cycleVis.insert(node);
                     cycleVis.insert(child);
-                    maxForTwo += 2 + bfs(node, graph, cycleVis) + bfs(child, graph, cycleVis);
+                    maxForTwo += bfs(node, graph, cycleVis) + bfs(child, graph, cycleVis);
                 }
                 maxLen = max(maxLen, cycleLen);
             }
