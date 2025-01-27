@@ -1,50 +1,58 @@
 class Solution {
-private:
-    unordered_set<int> dfs(
-        int node, 
-        vector<vector<int>>& graph, 
-        unordered_map<int, unordered_set<int>>& mp
-    ) {
-        if(mp.find(node) == mp.end()) {
-            for(int i = 0; i < graph[node].size(); i++) {
-                int v = graph[node][i];
-                mp[node].insert(v);
-                unordered_set<int> st = dfs(v, graph, mp);
-                for(auto it:st) mp[node].insert(it);
-            }
-        }
-
-        return mp[node];
-    }
 public:
     vector<bool> checkIfPrerequisite(
-        int num, 
-        vector<vector<int>>& preqs, 
-        vector<vector<int>>& qrs
+        int numCourses, 
+        vector<vector<int>>& prerequisites, 
+        vector<vector<int>>& queries
     ) {
-        vector<vector<int>> graph(num);
+        vector<vector<int>> graph(numCourses);
+        vector<int> indgr(numCourses, 0);
 
-        unordered_map<int, unordered_set<int>> mp;
-        // mp[node] -> hashset of all the prerequisites
-
-        for(int i = 0; i < preqs.size(); i++) {
-            // for [a, b], we are taking b -> a manner, so that we can keep track
-            // of the prerequisites of b in a hashset
-            int u = preqs[i][1]; 
-            int v = preqs[i][0];
+        for(int i = 0; i < prerequisites.size(); i++) {
+            int u = prerequisites[i][0], v = prerequisites[i][1];
+            indgr[v]++;
             graph[u].push_back(v);
         }
 
-        for(int i = 0; i < num; i++) dfs(i, graph, mp);
+        queue<int> q;
 
-        vector<bool> ans(qrs.size(), false);
-
-        for(int i = 0; i < qrs.size(); i++) {
-            int a = qrs[i][0];
-            int b = qrs[i][1];
-            if(mp.find(b) != mp.end() && mp[b].find(a) != mp[b].end()) ans[i] = true;
+        for(int i = 0; i < numCourses; i++) {
+            if(indgr[i] == 0) q.push(i);
         }
 
-        return ans;
+        unordered_map<int, unordered_set<int>> nodePrereqs;
+
+        while(!q.empty()) {
+            int node = q.front();
+            q.pop();
+
+            for(int i:graph[node]) {
+                // nodePrereqs[i] => the prerequisites of i
+                nodePrereqs[i].insert(node);
+
+                // nodePrereqs[node] => the prerequisites of node
+                for(int it:nodePrereqs[node]) {
+                    // inserting all the prerequisites of node as prereqs of i
+                    nodePrereqs[i].insert(it);
+                } 
+
+                indgr[i]--;
+
+                if(indgr[i] == 0) {
+                    q.push(i);
+                }
+            }
+        }
+
+        vector<bool> res(queries.size(), false);
+
+        for(int i = 0; i < queries.size(); i++) {
+            int u = queries[i][0], v = queries[i][1];
+
+            if(nodePrereqs.find(v) != nodePrereqs.end() && nodePrereqs[v].find(u) != nodePrereqs[v].end()) 
+                res[i] = true;
+        }
+
+        return res;
     }
 };
