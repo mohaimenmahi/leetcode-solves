@@ -1,44 +1,61 @@
-class Solution {
+class UnionFind {
 private:
-    int find(int node, vector<int>& parent, vector<int>& rank) {
-        int p = parent[node];
-
-        while(p != parent[p]) {
-            parent[p] = parent[parent[p]];
-            p = parent[p];
+    int n;
+    vector<int> parent, rank;
+public:
+    UnionFind(int nodes) {
+        n = nodes;
+        for(int i = 0; i <= n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
         }
-
-        parent[node] = p;
-        return p;
     }
 
-    bool makeUnion(int n1, int n2, vector<int>& parent, vector<int>& rank) {
-        int p1 = find(n1, parent, rank);
-        int p2 = find(n2, parent, rank);
+    int findParent(int node) {
+        int par = parent[node];
 
-        if(p1 == p2) return false;
-        else if(rank[p1] > rank[p2]) {
-            parent[p2] = p1;
-            rank[p1] += rank[p2];
+        while(par != parent[par]) {
+            parent[par] = parent[parent[par]];
+            par = parent[par];
+        }
+
+        parent[node] = par;
+        return par;
+    }
+
+    void makePair(int u, int v) {
+        int up = findParent(u);
+        int vp = findParent(v);
+
+        if(up == vp) return;
+
+        if(rank[up] > rank[vp]) {
+            rank[up] += rank[vp];
+            parent[vp] = up;
         } else {
-            parent[p1] = p2;
-            rank[p2] += rank[p1];
+            rank[vp] += rank[up];
+            parent[up] = vp;
         }
-
-        return true;
     }
+};
+
+class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n = edges.size();
 
-        vector<int> parent(n+1, 0), rank(n+1, 1);
+        UnionFind uf(n);
 
-        for(int i = 0; i <= n; i++) parent[i] = i;
-
+        vector<int> ans;
         for(int i = 0; i < n; i++) {
-            if(!makeUnion(edges[i][0], edges[i][1], parent, rank)) return edges[i];
+            int u = edges[i][0], v = edges[i][1];
+
+            int up = uf.findParent(u), vp = uf.findParent(v);
+
+            if(up != vp) uf.makePair(u, v);
+            else ans = {u, v};
         }
 
-        return {};
+        return ans;
     }
 };
