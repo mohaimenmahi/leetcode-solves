@@ -51,18 +51,20 @@ public:
             for(int j = 0; j < n; j++) {
                 if(!grid[i][j]) {
                     unordered_set<int> visIsland;
+                    int cnt = 1;
                     for(int k = 0; k < 4; k++) {
                         int row = i + dir[k][0], col = j + dir[k][1];
 
                         if(row >= 0 && row < n && col >= 0 && col < n) {
                             int island = grid[row][col];
-
-                            visIsland.insert(island);
+                            
+                            if(!visIsland.count(island)) {
+                                cnt += mp[island];
+                                visIsland.insert(island);
+                            }
                         }
                     }
-                    int cnt  = 1;
-                    for(int it:visIsland) cnt += mp[it];
-
+                    
                     res = max(res, cnt);
                 }
             }
