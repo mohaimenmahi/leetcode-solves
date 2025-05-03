@@ -1,32 +1,37 @@
 class Solution {
 public:
     string pushDominoes(string dominoes) {
-        int n = dominoes.size();
+        vector<char> dom(dominoes.begin(), dominoes.end());
 
-        vector<int> forces(n, 0);
-
-        int force = 0;
-        for(int i = 0; i < n; i++) {
-            if(dominoes[i] == 'R') force = n;
-            else if(dominoes[i] == 'L') force = 0;
-            else force = max(force-1, 0);
-            forces[i] += force;
-        }
-
-        force = 0;
-        for(int i = n-1; i >= 0; i--) {
-            if(dominoes[i] == 'L') force = n;
-            else if(dominoes[i] == 'R') force = 0;
-            else force = max(force-1, 0);
-            forces[i] -= force;
-        }
-
-        string ans;
+        int n = dom.size();
+        queue<pair<int, int>> q;
 
         for(int i = 0; i < n; i++) {
-            ans.push_back(forces[i] > 0 ? 'R' : forces[i] < 0 ? 'L' : '.');
+            if(dom[i] != '.') q.push({i, dom[i]});
         }
 
-        return ans;
+        while(!q.empty()) {
+            auto [idx, d] = q.front();
+            q.pop();
+
+            if(d == 'L') {
+                if(idx > 0 && dom[idx-1] == '.') {
+                    dom[idx-1] = 'L';
+                    q.push({idx-1, 'L'});
+                }
+            } else {
+                if(idx + 1 < n && dom[idx+1] == '.') {
+                    if(idx + 2 < n && dom[idx+2] == 'L') q.pop();
+                    else {
+                        dom[idx+1] = 'R';
+                        q.push({idx+1, 'R'});
+                    }
+                }
+            }
+        }
+
+        string res(dom.begin(), dom.end());
+
+        return res;
     }
 };
